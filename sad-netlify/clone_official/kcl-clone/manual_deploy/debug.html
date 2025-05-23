@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug Page - SAD Netlify</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #0066cc;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+    }
+    .success {
+      background-color: #e6ffe6;
+      border-color: #99cc99;
+    }
+    .warning {
+      background-color: #ffffcc;
+      border-color: #ffcc66;
+    }
+    .error {
+      background-color: #ffe6e6;
+      border-color: #cc9999;
+    }
+    button {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0055aa;
+    }
+  </style>
+</head>
+<body>
+  <h1>SAD Netlify Debug Page</h1>
+
+  <div class="card success">
+    <h2>Static Content Test</h2>
+    <p>If you can see this page, static content is serving correctly.</p>
+  </div>
+
+  <div class="card">
+    <h2>Asset Loading Test</h2>
+    <p>Testing if assets load correctly:</p>
+    <img src="/images/sad-logo.svg" alt="Logo" width="100" height="100" onerror="this.after('❌ Failed to load image')">
+    <p>CSS Test: <span id="css-test" style="color: green; font-weight: bold;">This should be green and bold</span></p>
+  </div>
+
+  <div class="card">
+    <h2>JavaScript Test</h2>
+    <p>Testing if JavaScript runs:</p>
+    <p id="js-result">JavaScript is not running</p>
+    <button id="js-test-btn">Test JavaScript</button>
+  </div>
+
+  <div class="card warning">
+    <h2>Environment Information</h2>
+    <p>URL: <span id="current-url"></span></p>
+    <p>User Agent: <span id="user-agent"></span></p>
+    <p>Screen Size: <span id="screen-size"></span></p>
+  </div>
+
+  <script>
+    // Basic JavaScript test
+    document.getElementById('js-result').textContent = 'JavaScript is running!';
+
+    // Button event listener
+    document.getElementById('js-test-btn').addEventListener('click', function() {
+      alert('JavaScript button click works!');
+    });
+
+    // Environment info
+    document.getElementById('current-url').textContent = window.location.href;
+    document.getElementById('user-agent').textContent = navigator.userAgent;
+    document.getElementById('screen-size').textContent =
+      window.innerWidth + 'x' + window.innerHeight;
+
+    // Check for common issues
+    const issues = [];
+
+    // Check if running in iframe (can cause issues)
+    if (window !== window.top) {
+      issues.push('Running in iframe - may cause CORS issues');
+    }
+
+    // Check for localStorage access
+    try {
+      localStorage.setItem('test', 'test');
+      localStorage.removeItem('test');
+    } catch (e) {
+      issues.push('Cannot access localStorage: ' + e.message);
+    }
+
+    // Add any detected issues to the page
+    if (issues.length > 0) {
+      const issueCard = document.createElement('div');
+      issueCard.className = 'card error';
+      issueCard.innerHTML = `<h2>Detected Issues</h2><ul>${issues.map(i => `<li>${i}</li>`).join('')}</ul>`;
+      document.body.appendChild(issueCard);
+    }
+  </script>
+</body>
+</html>

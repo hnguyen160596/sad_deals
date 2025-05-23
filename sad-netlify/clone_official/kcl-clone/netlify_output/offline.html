@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You are offline - Sales Aholics Deals</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <style>
+    /* Simple reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #982a4a;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      max-width: 180px;
+      margin: 0 auto;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+    }
+
+    .offline-container {
+      background-color: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      margin-top: 2rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #982a4a;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+
+    .offline-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .button {
+      display: inline-block;
+      background-color: #982a4a;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 1rem;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #b03353;
+    }
+
+    .cached-deals {
+      margin-top: 2rem;
+      border-top: 1px solid #eee;
+      padding-top: 2rem;
+    }
+
+    .deals-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+
+    .deal-item {
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 1rem;
+      transition: transform 0.2s;
+    }
+
+    .deal-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background-color: #f1f1f1;
+      color: #666;
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 600px) {
+      .offline-container {
+        padding: 1.5rem 1rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+
+      .deals-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/images/sad-logo.svg" alt="Sales Aholics Deals" class="logo" onerror="this.src='/images/sad-text-logo.png'; this.onerror=null;">
+  </header>
+
+  <main>
+    <div class="offline-container">
+      <svg class="offline-icon" viewBox="0 0 24 24" fill="none" stroke="#982a4a" stroke-width="2">
+        <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 1112 21.94a10.94 10.94 0 014.72-10.88" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M9 9h.01M15 9h.01" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+
+      <h1>You're currently offline</h1>
+      <h2>No internet connection available</h2>
+
+      <p>Don't worry! You can still access previously browsed deals that have been saved for offline viewing.</p>
+
+      <a href="/" class="button" id="refreshButton">Try Again</a>
+
+      <div class="cached-deals">
+        <h2>Your Recent Deals</h2>
+        <p>Here are some deals you've recently viewed:</p>
+
+        <div class="deals-list" id="cachedDeals">
+          <!-- Cached deals will be populated via JavaScript -->
+          <div class="deal-item">
+            <p>Loading cached deals...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Sales Aholics Deals. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Check if we're offline
+    if (navigator.onLine) {
+      window.location.href = '/';
+    }
+
+    // Refresh button handler
+    document.getElementById('refreshButton').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.reload();
+    });
+
+    // Function to display cached deals
+    async function showCachedDeals() {
+      try {
+        const dealsContainer = document.getElementById('cachedDeals');
+        dealsContainer.innerHTML = '';
+
+        // Try to get cached deals
+        const cache = await caches.open('images-cache-v1');
+        const cachedRequests = await cache.keys();
+        const imageUrls = cachedRequests
+          .filter(request => request.url.includes('deals') || request.url.includes('images'))
+          .slice(0, 6); // limit to 6 images
+
+        if (imageUrls.length === 0) {
+          dealsContainer.innerHTML = '<p>No cached deals available. Visit some deals when you\'re back online!</p>';
+          return;
+        }
+
+        // Display cached deals
+        imageUrls.forEach(request => {
+          const dealItem = document.createElement('div');
+          dealItem.className = 'deal-item';
+
+          const itemName = request.url.split('/').pop().split('.')[0].replace(/-/g, ' ');
+
+          dealItem.innerHTML = `
+            <p>${itemName.charAt(0).toUpperCase() + itemName.slice(1)}</p>
+            <p style="color: #982a4a; font-weight: bold;">View when online</p>
+          `;
+
+          dealsContainer.appendChild(dealItem);
+        });
+      } catch (error) {
+        console.error('Error displaying cached deals:', error);
+        document.getElementById('cachedDeals').innerHTML = '<p>Error loading cached deals.</p>';
+      }
+    }
+
+    // Show cached deals when page loads
+    window.addEventListener('load', showCachedDeals);
+
+    // Listen for online status changes
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

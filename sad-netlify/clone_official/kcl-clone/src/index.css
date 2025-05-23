@@ -1,0 +1,430 @@
+/* Font optimization for Core Web Vitals */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/inter-bold.woff2') format('woff2');
+}
+
+/* Define font size variables for better consistency */
+:root {
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-base: 1rem;    /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-2xl: 1.5rem;   /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem;  /* 36px */
+}
+
+/* preload critical elements for performance */
+body::before {
+  content: '';
+  display: none;
+}
+
+/* Set font-display: swap for all icons to improve CLS */
+.icon, .svg-icon, [class*="icon-"] {
+  font-display: block;
+}
+
+/* Optimize commonly loaded components to reduce CLS */
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: block;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
+/* Add a default aspect ratio for images to reduce CLS */
+img {
+  aspect-ratio: attr(width) / attr(height);
+}
+
+/* Set explicit heights for elements that often cause CLS */
+input, select, textarea, button {
+  min-height: 44px;
+}
+
+/* Custom KUniforma font-faces */
+@font-face {
+  font-family: 'SAD-Uniform';
+  src: url('https://ext.same-assets.com/3000230773/2662632618.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'SAD-Uniform';
+  src: url('https://ext.same-assets.com/3000230773/2243457729.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'SAD-Uniform';
+  src: url('https://ext.same-assets.com/3000230773/1420100845.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'SAD-Uniform';
+  src: url('https://ext.same-assets.com/3000230773/2011064974.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
+/* End custom fonts */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom toggle styles */
+.toggle-checkbox:checked {
+  right: 0;
+  transform: translateX(100%);
+  border-color: white;
+}
+
+.toggle-label {
+  transition: background-color 0.2s ease-in-out;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium text-gray-900 dark:text-white;
+  }
+
+  /* Dark mode focus styles */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary dark:ring-primary-dark ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
+  }
+
+  /* Smooth transitions for theme switching */
+  .theme-transition {
+    @apply transition-colors duration-200;
+  }
+
+  /* Basic link styling */
+  a {
+    @apply text-primary hover:text-primary-600 dark:text-primary-dark dark:hover:text-primary-500;
+  }
+
+  /* Form elements */
+  input, select, textarea {
+    @apply bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-white dark:bg-gray-800 shadow-md hover:shadow-lg dark:shadow-gray-800/30 dark:hover:shadow-gray-800/50 rounded-lg overflow-hidden transition-shadow;
+  }
+}
+
+/* Component styles */
+@layer components {
+  /* Button variants */
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-600 text-white dark:bg-primary-dark dark:hover:bg-primary-500;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200;
+  }
+
+  /* Form controls */
+  .form-input {
+    @apply p-2 border border-gray-300 dark:border-gray-700 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark;
+  }
+
+  /* Search input */
+  .search-input {
+    @apply bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md px-3 py-2 focus:bg-white dark:focus:bg-gray-700;
+  }
+
+  /* Navigation links */
+  .nav-link {
+    @apply text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-dark;
+  }
+
+  /* Deal cards */
+  .deal-card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg dark:shadow-gray-800/30 dark:hover:shadow-gray-800/50 overflow-hidden;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Admin Dark Mode Styles */
+:root {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f9fafb;
+  --color-bg-tertiary: #f3f4f6;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-tertiary: #6b7280;
+  --color-border-primary: #e5e7eb;
+  --color-border-secondary: #d1d5db;
+  --color-sidebar: #ffffff;
+  --color-accent: #982a4a;
+  --color-accent-hover: rgba(152, 42, 74, 0.9);
+  --color-accent-light: rgba(152, 42, 74, 0.1);
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 240 5.9% 10%;
+  --radius: 0.5rem;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+}
+
+.admin-dark-mode {
+  --color-bg-primary: #1f2937;
+  --color-bg-secondary: #111827;
+  --color-bg-tertiary: #374151;
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #e5e7eb;
+  --color-text-tertiary: #9ca3af;
+  --color-border-primary: #374151;
+  --color-border-secondary: #4b5563;
+  --color-sidebar: #111827;
+  --color-accent: #982a4a;
+  --color-accent-hover: rgba(152, 42, 74, 0.9);
+  --color-accent-light: rgba(152, 42, 74, 0.2);
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.26);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+}
+
+.admin-dark-mode .admin-panel {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+.admin-dark-mode .admin-sidebar {
+  background-color: var(--color-sidebar);
+  border-color: var(--color-border-primary);
+}
+
+.admin-dark-mode .admin-card {
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border-primary);
+}
+
+.admin-dark-mode .admin-input,
+.admin-dark-mode .admin-select,
+.admin-dark-mode .admin-textarea,
+.admin-dark-mode input[type="text"],
+.admin-dark-mode input[type="email"],
+.admin-dark-mode input[type="password"],
+.admin-dark-mode input[type="number"],
+.admin-dark-mode input[type="date"],
+.admin-dark-mode input[type="time"],
+.admin-dark-mode input[type="search"],
+.admin-dark-mode select,
+.admin-dark-mode textarea {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-border-secondary);
+  color: var(--color-text-primary);
+}
+
+.admin-dark-mode input::placeholder,
+.admin-dark-mode textarea::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.admin-dark-mode button,
+.admin-dark-mode .btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.admin-dark-mode button.bg-white,
+.admin-dark-mode .btn.bg-white {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-primary);
+}
+
+.admin-dark-mode button.bg-gray-50,
+.admin-dark-mode button.bg-gray-100,
+.admin-dark-mode .btn.bg-gray-50,
+.admin-dark-mode .btn.bg-gray-100 {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+}
+
+.admin-dark-mode .bg-white {
+  background-color: var(--color-bg-primary);
+}
+
+.admin-dark-mode .bg-gray-50,
+.admin-dark-mode .bg-gray-100 {
+  background-color: var(--color-bg-tertiary);
+}
+
+.admin-dark-mode .text-gray-900 {
+  color: var(--color-text-primary);
+}
+
+.admin-dark-mode .text-gray-700,
+.admin-dark-mode .text-gray-800 {
+  color: var(--color-text-secondary);
+}
+
+.admin-dark-mode .text-gray-500,
+.admin-dark-mode .text-gray-600 {
+  color: var(--color-text-tertiary);
+}
+
+.admin-dark-mode .border-gray-200,
+.admin-dark-mode .border-gray-300 {
+  border-color: var(--color-border-primary);
+}
+
+.admin-dark-mode .shadow-md,
+.admin-dark-mode .shadow-lg,
+.admin-dark-mode .shadow-sm {
+  box-shadow: var(--shadow-md);
+}
+
+.admin-dark-mode .admin-table th,
+.admin-dark-mode thead {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-primary);
+}
+
+.admin-dark-mode .admin-table tr:nth-child(even),
+.admin-dark-mode tbody tr:nth-child(even) {
+  background-color: var(--color-bg-tertiary);
+}
+
+.admin-dark-mode .admin-table tr:hover,
+.admin-dark-mode tbody tr:hover {
+  background-color: var(--color-bg-primary);
+}
+
+.admin-dark-mode table,
+.admin-dark-mode th,
+.admin-dark-mode td {
+  border-color: var(--color-border-primary);
+}
+
+.admin-dark-mode thead th {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.admin-dark-mode tbody {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.admin-dark-mode .admin-modal {
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border-primary);
+}
+
+/* Keep accent colors consistent in both modes */
+.admin-btn-primary {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.admin-btn-primary:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.admin-text-accent {
+  color: var(--color-accent);
+}
+
+.admin-bg-accent-light {
+  background-color: var(--color-accent-light);
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+}

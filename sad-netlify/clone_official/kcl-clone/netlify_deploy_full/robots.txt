@@ -1,0 +1,31 @@
+# Robots.txt for salesaholicsdeals.com
+# Last updated: 2025-05-22
+
+# Allow all crawlers by default
+User-agent: *
+Allow: /
+
+# Disallow admin and API areas
+Disallow: /admin-dashboard
+Disallow: /admin-login
+Disallow: /.netlify/functions/
+Disallow: /api/
+
+# Block sensitive content
+Disallow: */private/*
+Disallow: */draft/*
+Disallow: */unpublished/*
+
+# Crawl delay directive for specific bots
+User-agent: Googlebot
+Crawl-delay: 1
+
+User-agent: Bingbot
+Crawl-delay: 2
+
+# Block specific bots
+User-agent: PetalBot
+Disallow: /
+
+# Sitemap locations
+Sitemap: https://salesaholicsdeals.com/sitemap.xml
